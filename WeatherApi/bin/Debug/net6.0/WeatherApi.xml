@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WeatherApi</name>
+    </assembly>
+    <members>
+        <member name="M:WeatherApi.Repository.WeatherRepository.#ctor(WeatherApi.Services.MongoConnectionBuilder)">
+             <summary>
+             
+             </summary>
+             <param name="connection"></param>
+            
+        </member>
+        <member name="M:WeatherApi.Repository.WeatherRepository.Created(WeatherApi.Models.Weather)">
+            <summary>
+            
+            </summary>
+            <param name="createWeather"></param>
+            
+        </member>
+        <member name="M:WeatherApi.Repository.WeatherRepository.CreateMany(System.Collections.Generic.List{WeatherApi.Models.Weather})">
+            <summary>
+            
+            </summary>
+            <param name="WeatherList"></param>
+        </member>
+    </members>
+</doc>
