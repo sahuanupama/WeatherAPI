@@ -76,7 +76,7 @@ builder.Services.AddCors(options =>
         p.WithOrigins("https://www.youtube.com");
         p.AllowAnyHeader();
 
-        p.WithHeaders("GET");
+        p.WithMethods("GET");
     });
 
 });
@@ -91,7 +91,7 @@ if (app.Environment.IsDevelopment())
     }
 
 app.UseHttpsRedirection();
-app.UseCors("YouTubePolicy");
+app.UseCors("youTubePolicy");
 
 app.UseAuthorization();
 

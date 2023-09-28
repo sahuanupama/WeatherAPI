@@ -7,5 +7,8 @@ namespace WeatherApi.Repository
         bool CreateUser(ApiUser user);
         ApiUser AuthenticateUser(string apiKey, UserRoles requiredRole);
         void UpdateLastLogin(string apiKey);
+        //  void DeleteManyUser(ApiUser user);
+        // void DeleteUser(ApiUser id);
+
         }
     }

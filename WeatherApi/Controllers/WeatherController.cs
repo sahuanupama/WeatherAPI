@@ -66,7 +66,6 @@ namespace WeatherApi.Controllers
                 return BadRequest();
                 }
             return Ok(_repository.GetById(id));
-
             }
 
         // POST api/<WeatherController>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using WeatherApi.Models;
 using WeatherApi.Models.DTOs;
 using WeatherApi.Repository;
@@ -44,6 +45,7 @@ namespace WeatherApi.Controllers
             return Ok();
             }
 
+
         private bool IsAuthenticated(string apiKey, UserRoles requiredRole)
             {
 
@@ -61,5 +63,37 @@ namespace WeatherApi.Controllers
 
 
 
+        /* [HttpDelete("{id}")]
+         public ActionResult DeleteUser(string id, string apiKey, UserCreateDTO userDTo)
+
+             {
+             if (String.IsNullOrEmpty(id))
+                 {
+                 return BadRequest();
+                 }
+             if (IsAuthenticated(apiKey, UserRoles.ADMIN) == false)
+                 {
+                 return Unauthorized("you are not authorised");
+                 }
+
+             _userRepository.DeleteUser(id);
+             return Ok();
+             }
+         }*/
+        /* [HttpDelete("DeleteOlderThanGivenDays")]
+         public ActionResult DeleteOnOlderThanDays([FromQuery] int? days)
+             {
+             if (days >= 0)
+                 {
+                 return ();
+                 }
+             ApiUser users = new ApiUser
+                 {
+                 LastAccess = DateTime.Now.AddDays(Math.Abs((int)days) * -1),
+                 };
+             _userRepository.DeleteManyUser(users);
+             return ();
+             }
+     */
         }
     }
