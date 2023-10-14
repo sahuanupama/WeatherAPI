@@ -11,6 +11,7 @@ namespace WeatherApi.Models
             }
         public DbSet<Weather> Weathers { get; set; }
         public DbSet<Weather> ApiUsers { get; set; }
+        
         }
     }
 

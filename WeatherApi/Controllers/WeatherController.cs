@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using WeatherApi.Middaleware;
 using WeatherApi.Models;
+using WeatherApi.Models.DTOs;
 using WeatherApi.Models.WeatherFilter;
 using WeatherApi.Repository;
 
@@ -12,7 +15,7 @@ namespace WeatherApi.Controllers
     [EnableCors("GooglePolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    [ApiKey("ADMIN")]
+    //[ApiKey("ADMIN")]
     public class WeatherController : ControllerBase
         {
         private readonly IWeatherRepository _repository;
@@ -43,6 +46,32 @@ namespace WeatherApi.Controllers
             return _repository.GetAll(weatherFilter);
             }
 
+        // GET: api/Notes/Filtered
+        [HttpGet("MaxPrecipitation")]
+        public ActionResult GetMaxPrecipitation(string deviceName)
+            {
+            //Sends a message to the repository ot request it to retrieve all
+            //entries from the database
+
+            WeatherFilter weatherFilter = new WeatherFilter
+                {
+                DeviceName = deviceName
+                };
+            Weather weather = _repository.GetMaxPercipitation(weatherFilter);
+
+            PercipitationDTO percipitationDTO = new PercipitationDTO
+                {
+                DeviceName = weather.DeviceName,
+                Precipitation = weather.Precipitation,
+                DateTime = weather.Time,
+                };
+
+            return Ok(percipitationDTO);
+            }
+
+
+
+
         [HttpHead("Filtered")]
         public ActionResult GetHeaders([FromQuery] WeatherFilter filter)
             {
@@ -53,6 +82,49 @@ namespace WeatherApi.Controllers
             HttpContext.Response.Headers.Add("record-count", count.ToString());
 
             return Ok();
+            }
+
+
+        // GET api/<WeatherController>/5
+        [HttpGet("DataAtGivenDateTime")]
+        public ActionResult GetByDeviceNameAndDataAtGivenDateTime(string deviceName, DateTime afterTime, DateTime beforeTime)
+            {
+            if (string.IsNullOrEmpty(deviceName))
+                {
+                return BadRequest();
+                }
+            WeatherFilter weatherFilter = new WeatherFilter
+                {
+                DeviceName = deviceName,
+                AfterTime = afterTime,
+                BeforeTime = beforeTime
+                };
+            return Ok(_repository.GetAll(weatherFilter));
+            }
+
+
+
+
+        // GET api/<WeatherController>/5
+        [HttpGet("MaxTemperatureGivenDateTimeRange")]
+        public ActionResult GetMaxTempForGivenDateTimeRange(DateTime afterTime, DateTime beforeTime)
+            {
+
+            WeatherFilter weatherFilter = new WeatherFilter
+                {
+                AfterTime = afterTime,
+                BeforeTime = beforeTime
+                };
+
+            Weather weather = _repository.GetMaxTemperature(weatherFilter);
+
+            TemperatureDTO temperatureDTO = new TemperatureDTO
+                {
+                DeviceName = weather.DeviceName,
+                dateTime = weather.Time,
+                Temperature = weather.Temperature
+                };
+            return Ok(temperatureDTO);
             }
 
 
@@ -155,39 +227,39 @@ namespace WeatherApi.Controllers
             return Ok();
             }
 
-        /*        //DELETE: api/Notes/DeleteOlderThanGivenDays
-                [HttpDelete("DeleteOlderThanGivenDays")]
-                public ActionResult DeleteOlderThanDays([FromQuery] int? days)
-                    {
-                    //Check if a days value is provided and that it complies with our business rules 
-                    if (days == null || days <= 30)
-                        {
-                        return BadRequest();
-                        }
+        /*//DELETE: api/Notes/DeleteOlderThanGivenDays
+        [HttpDelete("DeleteOlderThanGivenDays")]
+        public ActionResult DeleteOlderThanDays([FromQuery] int? days)
+            {
+            //Check if a days value is provided and that it complies with our business rules 
+            if (days == null || days <= 30)
+                {
+                return BadRequest();
+                }
 
-                    NoteFilter filter = new NoteFilter
-                        {
-                        //Add a created before filter to our filter details to be used for building our
-                        //filter definitions later. The calculation in the add days section ensures the value
-                        //will result in a past date, not a future one by accident.
-                        CreatedBefore = DateTime.Now.AddDays(Math.Abs((int)days) * -1)
-                        };
+            WeatherFilter filter = new WeatherFilter
+                {
+                //Add a created before filter to our filter details to be used for building our
+                //filter definitions later. The calculation in the add days section ensures the value
+                //will result in a past date, not a future one by accident.
+                BeforeTime = DateTime.Now.AddDays(Math.Abs((int)days) * -1)
+                };
 
-                    //Process the reauest and store the details regarding the success/failure of the 
-                    //request
-                    var result = _repository.DeleteMany(filter);
-                    //If the request show a failure, inform the user.
-                    if (result.WasSuccessful == false)
-                        {
-                        result.Message = "No records found within that range";
-                        return Ok(result);
-                        }
-                    //Otherwise, send an Ok(200) message
-                    return Ok(result);
-                    }
-
-                [HttpDelete("DeleteByTitleMatch")]
-                public ActionResult DeleteByTitleMatch([FromQuery] string? searchTerm)
+            //Process the reauest and store the details regarding the success/failure of the 
+            //request
+            var result = _repository.DeleteMany(filter);
+            //If the request show a failure, inform the user.
+            if (result.WasSuccessful == false)
+                {
+                result.Message = "No records found within that range";
+                return Ok(result);
+                }
+            //Otherwise, send an Ok(200) message
+            return Ok(result);
+            }*/
+        /*
+                [HttpDelete("DeleteByAbovePrecipitation")]
+                public ActionResult DeleteByAbovePrecipitation([FromQuery] double? searchTerm)
                     {
                     //Validate our user input to ensure it meets our busines rules.
                     if (searchTerm == null || searchTerm.Length <= 3)
@@ -196,11 +268,11 @@ namespace WeatherApi.Controllers
                                                                         "of more then 3 Characters ");
                         }
 
-                    NoteFilter filter = new NoteFilter
+                    WeatherFilter filter = new WeatherFilter
                         {
                         //Create a new note filter object which takes the search term and will later be
                         //passed to the delete method to delete based upon thr term provided.
-                        TitleMatch = searchTerm
+                        AbovePrecipitation = searchTerm
                         };
 
                     //Process the reauest and store the details regarding the success/failure of the 
@@ -214,7 +286,8 @@ namespace WeatherApi.Controllers
                     //Otherwise, send an Ok(200) message
                     return Ok(result);
                     }
-        */
-
+        *//*
+        [HttpGet("MaxPrecitiptationRecord")]
+        public void precitiptationRecord<recod>.precipitionDto(string )*/
         }
     }

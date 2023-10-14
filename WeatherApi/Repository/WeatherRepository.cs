@@ -1,11 +1,14 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.PowerBI.Api.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using NuGet.Packaging.Signing;
 using System;
 using System.Text.RegularExpressions;
 using WeatherApi.Models;
+using WeatherApi.Models.Filter;
 using WeatherApi.Models.WeatherFilter;
 using WeatherApi.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -15,6 +18,8 @@ namespace WeatherApi.Repository
     public class WeatherRepository : IWeatherRepository
         {
         private readonly IMongoCollection<Weather> _weatherChange;
+
+        //private readonly IMongoCollection<Weather> _precipitationFilter;
         // private readonly ILogger _logger;
 
         /// <summary>
@@ -26,7 +31,6 @@ namespace WeatherApi.Repository
             {
             // _weatherChange = connection.GetDatabase().GetCollection<Weather>("WeatherChange");
             _weatherChange = connection.GetDatabase().GetCollection<Weather>("Weather");
-
             }
 
         /// <summary>
@@ -40,7 +44,8 @@ namespace WeatherApi.Repository
             }
 
         /// <summary>
-        /// 
+        /// Create list of weather.
+        /// Insert many data in the weather database.
         /// </summary>
         /// <param name="WeatherList"></param>
         public void CreateMany(List<Weather> WeatherList)
@@ -108,7 +113,8 @@ namespace WeatherApi.Repository
         public IEnumerable<Weather> GetAll(WeatherFilter weatherFilter)
             {
             var filter = GenerateFilterDefinition(weatherFilter);
-            return _weatherChange.Find(filter).ToEnumerable();
+            return _weatherChange.Find(filter).SortByDescending(w => w.Precipitation).Limit(10).
+                ToEnumerable();
             }
 
         public Weather GetById(string id)
@@ -153,7 +159,6 @@ namespace WeatherApi.Repository
             _weatherChange.DeleteMany(filter);
             }*/
 
-
         private UpdateDefinition<Weather> GenerateUpdateDefinition(WeatherPatchDetailsDto details)
             {
             return null;
@@ -180,22 +185,20 @@ namespace WeatherApi.Repository
                 filter &= builder.Gte(weather => weather.Precipitation, weatherFilter.BelowPrecipitation.Value);
                 }
 
-            if (weatherFilter.BeforeTime == null)
+            if (weatherFilter.BeforeTime.HasValue)
                 {
                 filter &= builder.Lte(weather => weather.Time, weatherFilter.BeforeTime);
                 }
-            if (weatherFilter.AfterTime == null)
+            if (weatherFilter.AfterTime.HasValue)
                 {
-                filter &= builder.Gte(weather => weather.Time
-                , weatherFilter.AfterTime);
+                filter &= builder.Gte(weather => weather.Time, weatherFilter.AfterTime);
                 }
 
-
-            if (weatherFilter.AboveTemperature == null)
+            if (weatherFilter.AboveTemperature != null)
                 {
                 filter &= builder.Lte(weather => weather.Temperature, weatherFilter.AboveTemperature.Value);
                 }
-            if (weatherFilter.BelowTemperature == null)
+            if (weatherFilter.BelowTemperature != null)
                 {
                 filter &= builder.Gte(weather => weather.Temperature, weatherFilter.BelowTemperature.Value);
                 }
@@ -205,7 +208,7 @@ namespace WeatherApi.Repository
                 {
                 filter &= builder.Lte(weather => weather.AtmosphericPressure, weatherFilter.AboveAtmosphericPressure.Value);
                 }
-            if (weatherFilter.BelowAtmosphericPressure == null)
+            if (weatherFilter.BelowAtmosphericPressure != null)
                 {
                 filter &= builder.Gte(weather => weather.AtmosphericPressure, weatherFilter.BelowAtmosphericPressure.Value);
                 }
@@ -242,6 +245,7 @@ namespace WeatherApi.Repository
             throw new NotImplementedException();
             }
 
+
         void IWeatherRepository.DeleteMany(WeatherFilter filter)
             {
             throw new NotImplementedException();
@@ -251,5 +255,20 @@ namespace WeatherApi.Repository
             {
             throw new NotImplementedException();
             }
+
+        Weather IWeatherRepository.GetMaxPercipitation(WeatherFilter weatherFilter)
+            {
+            var filter = GenerateFilterDefinition(weatherFilter);
+            return _weatherChange.Find(filter).SortByDescending(w => w.Precipitation).Limit(1).ToList().First();
+            }
+
+        Weather IWeatherRepository.GetMaxTemperature(WeatherFilter weatherFilter)
+            {
+            var filter = GenerateFilterDefinition(weatherFilter);
+            return _weatherChange.Find(filter).SortByDescending(w => w.Temperature).Limit(1).ToList().First();
+            }
         }
     }
+
+
+

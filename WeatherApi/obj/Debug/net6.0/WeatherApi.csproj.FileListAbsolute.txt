@@ -5,6 +5,7 @@ C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\WeatherApi.de
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\WeatherApi.runtimeconfig.json
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\WeatherApi.dll
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\WeatherApi.pdb
+C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\WeatherApi.xml
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\AWSSDK.Core.dll
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\AWSSDK.SecurityToken.dll
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\Azure.Core.dll
@@ -304,8 +305,7 @@ C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\scopedcss\bun
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\WeatherApi.csproj.CopyComplete
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\WeatherApi.dll
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\refint\WeatherApi.dll
+C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\WeatherApi.xml
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\WeatherApi.pdb
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\WeatherApi.genruntimeconfig.cache
 C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\ref\WeatherApi.dll
-C:\Users\anupa\source\repos\WeatherApi\WeatherApi\bin\Debug\net6.0\WeatherApi.xml
-C:\Users\anupa\source\repos\WeatherApi\WeatherApi\obj\Debug\net6.0\WeatherApi.xml

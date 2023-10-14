@@ -20,7 +20,8 @@
         </member>
         <member name="M:WeatherApi.Repository.WeatherRepository.CreateMany(System.Collections.Generic.List{WeatherApi.Models.Weather})">
             <summary>
-            
+            Create list of weather.
+            Insert many data in the weather database.
             </summary>
             <param name="WeatherList"></param>
         </member>

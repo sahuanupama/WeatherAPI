@@ -1,4 +1,6 @@
-﻿using WeatherApi.Models;
+﻿using MongoNotesAPI.Repositories;
+using WeatherApi.Models;
+using WeatherApi.Models.Filter;
 
 namespace WeatherApi.Repository
     {
@@ -7,8 +9,7 @@ namespace WeatherApi.Repository
         bool CreateUser(ApiUser user);
         ApiUser AuthenticateUser(string apiKey, UserRoles requiredRole);
         void UpdateLastLogin(string apiKey);
-        //  void DeleteManyUser(ApiUser user);
-        // void DeleteUser(ApiUser id);
-
+        void Delete(String id);
+        void DeleteMany(UserFilter userfilter);
         }
     }
